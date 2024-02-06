@@ -2,4 +2,4 @@ import click
 
 
 def hello(name):
-    click.echo(f'Hello {name}')
+    click.echo(f'Goodbye {name}')

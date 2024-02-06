@@ -1,7 +1,7 @@
 import datetime as dt
 import requests
 
-BASE_URL = 'http://dataservice.accuweather.com/forecasts/v1/daily/1day/'
+BASE_URL = 'https://dataservice.accuweather.com/forecasts/v1/daily/1day/'
 CITY_CODE = '207697'
 API_KEY = open('api_key.txt', 'r').read()
 

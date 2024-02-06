@@ -10,3 +10,5 @@ url = BASE_URL + CITY_CODE + '?apikey=' + API_KEY
 response = requests.get(url).json()
 
 print(response)
+
+

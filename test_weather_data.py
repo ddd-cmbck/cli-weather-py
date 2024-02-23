@@ -9,5 +9,4 @@ class TestWeatherData(unittest.TestCase):  # to do
     def setUp(self):
         w_data = WeatherData()
 
-    def test_get_weather(self):
-        pass
+

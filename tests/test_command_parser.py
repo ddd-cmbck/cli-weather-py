@@ -1,7 +1,6 @@
 import unittest
-from unittest.mock import patch
 
-from command_parser import CommandParser
+from api import CommandParser
 
 
 class TestCommandParser(unittest.TestCase):  # to do

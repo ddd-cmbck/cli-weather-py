@@ -1,7 +1,6 @@
 import unittest
-from unittest.mock import patch
 
-from weather_api_client import WeatherApiClient
+from api import WeatherApiClient
 
 
 class TestWeatherApiClient(unittest.TestCase):  # to do

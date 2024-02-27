@@ -1,5 +1,6 @@
-from api.functionality.weather_api_client import WeatherApiClient
-from api.functionality.formats import OutputFormatter
+from api import WeatherApiClient
+from api import OutputFormatter
+from api import CommandParser
 
 
 class WeatherApp:
@@ -14,6 +15,11 @@ class WeatherApp:
         self.api_client = WeatherApiClient()
         self.formatter = OutputFormatter()
 
+    def cli_setup(self):
+        user_args = 0
+        cli = CommandParser()
+        cli.parse()
+        cli.perform_operation()
+
     def run(self):  # to do
-        # Main application logic for initializing clients, fetching weather, and formatting output
-        pass
+        self.cli_setup()

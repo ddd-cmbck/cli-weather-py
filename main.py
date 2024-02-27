@@ -1,9 +1,8 @@
-from api import OperationCLI
+from api import WeatherApp
 
 if __name__ == '__main__':
-    cli = OperationCLI()
-    cli.parse_arguments()
-    cli.perform_operation()
+    cli = WeatherApp()
+    cli.run()
 
 
 

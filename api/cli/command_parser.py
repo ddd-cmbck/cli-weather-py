@@ -12,20 +12,23 @@ class CommandParser:
     def __init__(self):
         # Initialize the parser
         self.args = None
-        self.parser = ArgumentParser(usage='This program takes user input in form "forecast -(additional args)"'
-                                           'default: AccuWeather city -> Cork, 14 days forecast, default output,'
-                                           'weather, temperature, cloud cover ')
+        self.parser = ArgumentParser(usage='This program takes user input in form "forecast -(additional optional '
+                                           'args)" default: source AccuWeather city -> Cork, 14 days forecast, '
+                                           'default output, weather, temperature, cloud cover ')
         self.setup_args()
 
     def setup_args(self):
         # Configuration of command line arguments
-        self.parser.add_argument('forecast', action='store_true',
-                                 help='main command that returns true and runs our forecast ')
+        self.parser.add_argument('command', choices=['forecast'],
+                                 help='The command to run. Currently supports "forecast"')
         self.parser.add_argument('--source', type=str, default='accuweather.com',
                                  help='defines the source of the forecast')
-        self.parser.add_argument('-c', '--city', type=str, default='Cork, Ireland',
+        self.parser.add_argument('-c', '--city', type=str, default='Cork',
                                  help='defines the city of forecast')
-        self.parser.add_argument('-dur', '--duration', nargs=2, type=str, default=(1, 'd'),
+        self.parser.add_argument('-ctr', '--country', type=str, default='Ireland',
+                                 help='defines the country of forecast')  # change it in future
+        self.parser.add_argument('-dur', '--duration', type=str,
+                                 default='1d',
                                  help='an argument that accepts number of days/hours and str(d - days/ h - hours)',
                                  metavar=('INT', 'STR'))
         self.parser.add_argument('-wS', '--wind_speed', type=bool, default=True,
@@ -49,4 +52,12 @@ class CommandParser:
         self.args: Namespace = self.parser.parse_args()
 
     def perform_operation(self):
-        print(self.args.forecast)
+        if self.args.command == 'forecast':
+            print(self.args.command, self.args.source, self.args.city,
+                  self.args.duration, self.args.wind_speed, self.args.temperature,
+                  self.args.weather, self.args.precipitation, self.args.cloud_cover,
+                  self.args.precipitation_probability,
+                  self.args.sunrise, self.args.sunset)
+
+        else:
+            self.parser.print_help()

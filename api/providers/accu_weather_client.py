@@ -1,4 +1,4 @@
-from api.functionality.weather_api_client import WeatherApiClient
+from api.providers.weather_api_client import WeatherApiClient
 
 
 class AccuWeatherClient(WeatherApiClient):  # to do
@@ -8,6 +8,15 @@ class AccuWeatherClient(WeatherApiClient):  # to do
     and convert the API response into WeatherData format
 
     """
+
+    def get_source_response(self):
+        pass
+
+    def get_city(self):
+        pass
+
+    def get_valid_forcast_durations(self):
+        pass
 
     def get_weather(self, city, days, units):
         pass

@@ -1,4 +1,4 @@
 from .cli import OperationCLI, CommandParser
-from .functionality import WeatherData, WeatherApiClient, OutputFormatter
-from .providers import AccuWeatherClient
+from .data_formatting import WeatherData, OutputFormatter
+from .providers import AccuWeatherClient, WeatherApiClient
 from .weather_app import WeatherApp

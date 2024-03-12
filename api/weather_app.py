@@ -46,3 +46,4 @@ class WeatherApp:
 
     def run(self):  # to do
         self.cli.parse()
+        self.cli.perform_operation()

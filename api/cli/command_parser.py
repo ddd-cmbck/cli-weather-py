@@ -12,6 +12,7 @@ class CommandParser:
     def __init__(self):
         # Initialize the parser
         self.args = None
+        self.udict = {}
         self.parser = ArgumentParser(usage='This program takes user input in form "forecast -(additional optional '
                                            'args)" default: source AccuWeather city -> Cork, 14 days forecast, '
                                            'default output, weather, temperature, cloud cover ')
@@ -29,8 +30,8 @@ class CommandParser:
                                  help='defines the country of forecast')  # change it in future
         self.parser.add_argument('-dur', '--duration', type=str,
                                  default='1d',
-                                 help='an argument that accepts number of days/hours and str(d - days/ h - hours)',
-                                 metavar=('INT', 'STR'))
+                                 help='an argument that accepts number of days/hours and str(d - days/ h - hours)'
+                                 )
         self.parser.add_argument('-wS', '--wind_speed', type=bool, default=True,
                                  help='an argument that shows if user want to see average wind speed')
         self.parser.add_argument('-tmp', '--temperature', type=bool, default=True,
@@ -53,11 +54,20 @@ class CommandParser:
 
     def perform_operation(self):
         if self.args.command == 'forecast':
-            print(self.args.command, self.args.source, self.args.city,
-                  self.args.duration, self.args.wind_speed, self.args.temperature,
-                  self.args.weather, self.args.precipitation, self.args.cloud_cover,
-                  self.args.precipitation_probability,
-                  self.args.sunrise, self.args.sunset)
-
+            self.udict['command'] = self.args.command
+            self.udict['source'] = self.args.source
+            self.udict['city'] = self.args.city
+            self.udict['duration'] = self.args.duration
+            self.udict['wind_speed'] = self.args.wind_speed
+            self.udict['temperature'] = self.args.temperature
+            self.udict['weather'] = self.args.weather
+            self.udict['precipitation'] = self.args.precipitation
+            self.udict['cloud_cover'] = self.args.cloud_cover
+            self.udict['precipitation_prob'] = self.args.precipitation_probability
+            self.udict['sunrise'] = self.args.sunrise
+            self.udict['sunset'] = self.args.sunset
+            print(self.udict.keys())
+            print(self.udict.values())
         else:
             self.parser.print_help()
+        return self.udict

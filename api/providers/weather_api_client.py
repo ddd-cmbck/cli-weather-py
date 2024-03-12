@@ -1,5 +1,4 @@
-import http.client
-import json
+import requests
 
 
 class WeatherApiClient:  # to do
@@ -11,17 +10,10 @@ class WeatherApiClient:  # to do
     """
 
     def __init__(self):
-        self.host = 'default.com'
+        self.api_key = 'default'
+        self.base_url = 'https://www.defaultbaseurl.com/'
 
-    def get_source_response(self):
-        conn = http.client.HTTPSConnection(self.host)
-        conn.request('GET', '/')
-        resp = conn.getresponse()
-        data = resp.read().decode()
-        conn.close()
-        return json.loads(data)
-
-    def get_city(self):
+    def get_city_list(self, *args):
         pass
 
     def get_valid_forcast_durations(self):

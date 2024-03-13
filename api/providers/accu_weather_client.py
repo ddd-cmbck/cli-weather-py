@@ -13,7 +13,7 @@ class AccuWeatherClient(WeatherApiClient):  # to do
 
     def __int__(self):
         self.api_key = 'EQwGZb1GUqPiFCx66wG5TU6cvLrnTaJh'
-        self.base_url = 'http://dataservice.accuweather.com/'
+        self.base_url = 'https://dataservice.accuweather.com/'
 
     def get_city_list(self, location_name: str):
         params = {

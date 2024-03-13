@@ -9,9 +9,8 @@ class WeatherApiClient:  # to do
 
     """
 
-    def __init__(self):
-        self.api_key = 'default'
-        self.base_url = 'https://www.defaultbaseurl.com/'
+    def __init_subclass__(cls, **kwargs):
+
 
     def get_city_list(self, *args):
         pass

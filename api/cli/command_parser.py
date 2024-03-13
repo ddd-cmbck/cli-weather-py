@@ -48,6 +48,8 @@ class CommandParser:
                                  help='an argument that shows if user want to see sunrise time')
         self.parser.add_argument('-suns', '--sunset', type=bool, default=False,
                                  help='an argument that shows if user want to see sunset time')
+        self.parser.add_argument('-o', '--output', choices=['default', 'verbose', 'short'], default='default',
+                                 help='specifies the preferred output')
 
     def parse(self):
         self.args: Namespace = self.parser.parse_args()
@@ -66,6 +68,7 @@ class CommandParser:
             self.udict['precipitation_prob'] = self.args.precipitation_probability
             self.udict['sunrise'] = self.args.sunrise
             self.udict['sunset'] = self.args.sunset
+            self.udict['output'] = self.args.output
             print(self.udict.keys())
             print(self.udict.values())
         else:

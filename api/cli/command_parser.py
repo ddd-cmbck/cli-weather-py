@@ -69,8 +69,8 @@ class CommandParser:
             self.udict['sunrise'] = self.args.sunrise
             self.udict['sunset'] = self.args.sunset
             self.udict['output'] = self.args.output
-            print(self.udict.keys())
-            print(self.udict.values())
+            # print(self.udict.keys())
+            # print(self.udict.values())
         else:
             self.parser.print_help()
         return self.udict

@@ -11,7 +11,8 @@ class AccuWeatherClient(WeatherApiClient):  # to do
 
     """
 
-    def __int__(self):
+    def __init__(self):
+        print('initializing accuweather')
         self.api_key = 'EQwGZb1GUqPiFCx66wG5TU6cvLrnTaJh'
         self.base_url = 'https://dataservice.accuweather.com/'
 
@@ -21,21 +22,20 @@ class AccuWeatherClient(WeatherApiClient):  # to do
             'location': location_name,
             'url_descript': 'locations/v1/cities/search?'
         }
-        response = requests.get(self.base_url +
-                                params['url_descript'] +
-                                'apikey=' +
-                                params['apikey'] +
-                                '=' +
-                                params['location'])
+        print(params.values(), 'in get_city_list')
+        url = self.base_url + params['url_descript'] + 'apikey=' + params['apikey'] + '&q=' + params['location']
+        print(url)
+        response = requests.get(url)
+        print(response, 'in get_city_list')
         if response.status_code == 200:
             return response.json()
         else:
             print('Failed to retrieve data')
             return None
 
-
     def get_valid_forcast_durations(self):
         pass
 
     def get_weather(self, city, days, units):
         pass
+

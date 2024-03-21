@@ -1,4 +1,3 @@
-
 import requests
 
 
@@ -15,15 +14,11 @@ class WeatherApiClient:
         super().__init_subclass__(**kwargs)
         WeatherApiClient._subclasses.append(cls)
 
-
     def get_city_list(self, *args):
-        return 'Hello'
+        return None
 
-    def get_valid_forcast_durations(self):
-        pass
-
-    def get_weather(self, city, days, units):
-        pass
+    def get_forecast(self, *args):
+        return None
 
     @classmethod
     def append_subclasses(cls):

@@ -28,8 +28,8 @@ class CommandParser:
                                  help='defines the city of forecast')
         self.parser.add_argument('-ctr', '--country', type=str, default='Ireland',
                                  help='defines the country of forecast')  # change it in future
-        self.parser.add_argument('-dur', '--duration', type=str,
-                                 default='1d',
+        self.parser.add_argument('-dur', '--duration', type=str, choices=['1day', '10day', '15day', '5day'],
+                                 default='1day',
                                  help='an argument that accepts number of days/hours and str(d - days/ h - hours)'
                                  )
         self.parser.add_argument('-wS', '--wind_speed', type=bool, default=True,

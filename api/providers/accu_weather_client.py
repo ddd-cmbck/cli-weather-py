@@ -29,9 +29,18 @@ class AccuWeatherClient(WeatherApiClient):  # to do
             print('Failed to retrieve data')
             return None
 
-    def get_valid_forcast_durations(self):
-        pass
-
-    def get_weather(self, city, days, units):
-        pass
-
+    def get_forecast(self, city_key: str, duration: str):
+        params = {
+            'apikey': self.api_key,
+            'citykey': city_key,
+            'url_descript': 'forecasts/v1/daily/',
+            'duration': duration,
+            'details': '&details=true'
+        }
+        url = self.base_url + params['url_descript'] + duration + '/' + city_key + '?' + 'apikey=' + params['apikey'] + params['details']
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print('Failed to retrieve data')
+            return None

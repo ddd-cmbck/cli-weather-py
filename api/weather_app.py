@@ -1,6 +1,4 @@
-from api import WeatherApiClient, AccuWeatherClient
-from api import OutputFormatter
-from api import CommandParser
+from api import WeatherApiClient, AccuWeatherClient, WeatherData, OutputFormatter, CommandParser
 
 
 class WeatherApp:
@@ -12,7 +10,6 @@ class WeatherApp:
     """
 
     def __init__(self):
-        self.formatter = OutputFormatter()
         self.cli = CommandParser()
 
     def get_api_client(self, source):
@@ -30,7 +27,11 @@ class WeatherApp:
         self.cli.parse()
         cmd_dict = self.cli.perform_operation()
         api_client = self.get_api_client(cmd_dict['source'])
-        print(api_client, 'in main')
-        city = api_client.get_city_list(cmd_dict['city'])
-        print(city)
+        city_list = api_client.get_city_list(cmd_dict['city'])
+        print(city_list[0])
+        weather_data = WeatherData()
+        cities = weather_data.create_cities(city_list)
+
+
+
 

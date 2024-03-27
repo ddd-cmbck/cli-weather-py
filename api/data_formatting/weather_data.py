@@ -10,10 +10,22 @@ class WeatherData:
         self.ulist = []
 
     def create_cities(self, cities_list: list):
+        ulist = []
         for c in cities_list:
             city = City.from_accuweather(c)
-            self.ulist.append(city)
-        return self.ulist
+            ulist.append(city)
+        return ulist
+
+    def create_forecasts(self, forecasts_list: list):
+        ulist = []
+        for f in forecasts_list:
+            forecast = DailyForecast.from_accuweather(f)
+            ulist.append(forecast)
+        return ulist
+
+    def parse_to_list(self, forecasts_data: dict):
+        forecasts_list = forecasts_data.get('DailyForecasts', 'Unknown DailyForecasts')
+        return forecasts_list
 
 
 class City:
@@ -50,13 +62,39 @@ class City:
         return cls(key, name, country, admin_area, data_set)
 
 
-class Forecast:
+class DailyForecast:
     """
 
     Class for extracting and generalizing forecast data from API requested datasets
 
     """
+    def __repr__(self):
+        return f'Forecast(date={self.date}, sun={self.sun}' \
+               f', day={self.day}, night={self.night})'
 
-    def __init__(self, source, duration):
-        self.source = source
-        self.duration = duration
+    def __init__(self, date: dict, sun: dict, moon: dict, temperature: dict, hours_of_sun: str, day: dict, night: dict, **kwargs):
+        self.date = date
+        self.sun = sun
+        self.moon = moon
+        self.temperature = temperature
+        self.hours_of_sun = hours_of_sun
+        self.day = day
+        self.night = night
+
+    @classmethod
+    def from_accuweather(cls, forecast_data):
+        """
+
+        Factory method for creating DailyForecast instances from accu weather data format.
+
+        """
+        date = forecast_data.get('Date', 'Unknown Date')
+        sun = forecast_data.get('Sun', 'Unknown Sun Data')
+        moon = forecast_data.get('Moon', 'Unknown Moon Data')
+        temperature = forecast_data.get('Temperature', 'Unknown Temperature Data')
+        hours_of_sun = forecast_data.get('HoursOfSun', 'Unknown HoursOfSun')
+        day = forecast_data.get('Day', 'Unknown Day')
+        night = forecast_data.get('Night', 'Night')
+
+        return cls(date, sun, moon, temperature, hours_of_sun, day, night)
+

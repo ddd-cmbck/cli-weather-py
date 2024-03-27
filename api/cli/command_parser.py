@@ -22,7 +22,7 @@ class CommandParser:
         # Configuration of command line arguments
         self.parser.add_argument('command', choices=['forecast'],
                                  help='The command to run. Currently supports "forecast"')
-        self.parser.add_argument('-s', '--source', type=str, default='accuweather.com',
+        self.parser.add_argument('-s', '--source', type=str, choices=['accuweather.com'], default='accuweather.com',
                                  help='defines the source of the forecast')
         self.parser.add_argument('-c', '--city', type=str, default='Cork',
                                  help='defines the city of forecast')

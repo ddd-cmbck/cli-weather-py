@@ -35,15 +35,13 @@ class WeatherApp:
         cities = weather_data.create_cities(city_list)
         specific_city: City = cities[0]
         forecasts_data = api_client.get_forecast(specific_city.key, cmd_dict['duration'])
-        forecasts_list = weather_data.parse_to_list(forecasts_data)
-        forecasts = weather_data.create_forecasts(forecasts_list)
+        forecasts_list = weather_data.parse_to_list(forecasts_data=forecasts_data)
+        forecasts = weather_data.create_forecasts(forecasts_list=forecasts_list)
         specific_forecast: DailyForecast = forecasts[0]
         day_dict = specific_forecast.day
         night_dict = specific_forecast.night
         day: Day = weather_data.create_day_instance(day_night_dict=day_dict)
         night: Day = weather_data.create_day_instance(day_night_dict=night_dict)
-        print(day)
-        print('/////////////////////////////////////////////')
-        print(night)
+
 
 

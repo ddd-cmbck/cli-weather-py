@@ -73,36 +73,40 @@ class DailyForecast:
 
     """
 
-    def __init__(self, date: dict, sun: dict, moon: dict, temperature: dict, hours_of_sun: str, day: dict, night: dict,
+    def __init__(self, date, sunrise, sunset, moonrise, moonset, temperature, hours_of_sun, day, night,
                  **kwargs):
         self.date = date
-        self.sun = sun
-        self.moon = moon
+        self.sunrise = sunrise
+        self.sunset = sunset
+        self.moonrise = moonrise
+        self.moonset = moonset
         self.temperature = temperature
         self.hours_of_sun = hours_of_sun
         self.day = day
         self.night = night
 
     def __repr__(self):
-        return f'Forecast(date={self.date}, sun={self.sun}' \
-               f', day={self.day}, night={self.night})'
+        return f'Forecast(date={self.date}, sunrise={self.sunrise}, sunset={self.sunset},moonrise={self.moonrise}, ' \
+               f'moonset={self.moonset}, day={self.day}, night={self.night})'
 
     @classmethod
-    def from_accuweather(cls, forecast_data):
+    def from_accuweather(cls, forecast_data: dict):
         """
 
         Factory method for creating DailyForecast instances from accu weather data format.
 
         """
         date = forecast_data.get('Date', 'Unknown Date')
-        sun = forecast_data.get('Sun', 'Unknown Sun Data')
-        moon = forecast_data.get('Moon', 'Unknown Moon Data')
+        sunrise = forecast_data['Sun'].get('Rise', 'Unknown Sun Data')
+        sunset = forecast_data['Sun'].get('Set', 'Unknown Sun Data')
+        moonrise = forecast_data['Moon'].get('Rise', 'Unknown Moon Data')
+        moonset = forecast_data['Moon'].get('Set', 'Unknown Moon Data')
         temperature = forecast_data.get('Temperature', 'Unknown Temperature Data')
         hours_of_sun = forecast_data.get('HoursOfSun', 'Unknown HoursOfSun')
         day = forecast_data.get('Day', 'Unknown Day')
         night = forecast_data.get('Night', 'Night')
 
-        return cls(date, sun, moon, temperature, hours_of_sun, day, night)
+        return cls(date, sunrise, sunset, moonrise, moonset, temperature, hours_of_sun, day, night)
 
 
 class Day:

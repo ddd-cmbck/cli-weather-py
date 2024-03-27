@@ -1,5 +1,5 @@
 from api import WeatherApiClient, AccuWeatherClient, WeatherData, OutputFormatter, CommandParser
-from api.data_formatting.weather_data import City, DailyForecast
+from api.data_formatting.weather_data import City, DailyForecast, Day
 
 import pprint
 
@@ -38,6 +38,12 @@ class WeatherApp:
         forecasts_list = weather_data.parse_to_list(forecasts_data)
         forecasts = weather_data.create_forecasts(forecasts_list)
         specific_forecast: DailyForecast = forecasts[0]
-        print(specific_forecast)
+        day_dict = specific_forecast.day
+        night_dict = specific_forecast.night
+        day: Day = weather_data.create_day_instance(day_night_dict=day_dict)
+        night: Day = weather_data.create_day_instance(day_night_dict=night_dict)
+        print(day)
+        print('/////////////////////////////////////////////')
+        print(night)
 
 

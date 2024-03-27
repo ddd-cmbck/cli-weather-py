@@ -23,6 +23,10 @@ class WeatherData:
             ulist.append(forecast)
         return ulist
 
+    def create_day_instance(self, day_night_dict):
+        day = Day.from_accuweather(day_night_dict)
+        return day
+
     def parse_to_list(self, forecasts_data: dict):
         forecasts_list = forecasts_data.get('DailyForecasts', 'Unknown DailyForecasts')
         return forecasts_list
@@ -68,11 +72,9 @@ class DailyForecast:
     Class for extracting and generalizing forecast data from API requested datasets
 
     """
-    def __repr__(self):
-        return f'Forecast(date={self.date}, sun={self.sun}' \
-               f', day={self.day}, night={self.night})'
 
-    def __init__(self, date: dict, sun: dict, moon: dict, temperature: dict, hours_of_sun: str, day: dict, night: dict, **kwargs):
+    def __init__(self, date: dict, sun: dict, moon: dict, temperature: dict, hours_of_sun: str, day: dict, night: dict,
+                 **kwargs):
         self.date = date
         self.sun = sun
         self.moon = moon
@@ -80,6 +82,10 @@ class DailyForecast:
         self.hours_of_sun = hours_of_sun
         self.day = day
         self.night = night
+
+    def __repr__(self):
+        return f'Forecast(date={self.date}, sun={self.sun}' \
+               f', day={self.day}, night={self.night})'
 
     @classmethod
     def from_accuweather(cls, forecast_data):
@@ -98,3 +104,96 @@ class DailyForecast:
 
         return cls(date, sun, moon, temperature, hours_of_sun, day, night)
 
+
+class Day:
+    """
+
+    Class for extracting and generalizing day related data from forecast data
+
+    """
+
+    def __init__(self, has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
+                 precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
+                 ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
+                 total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,
+                 hours_of_snow, hours_of_ice, cloud_cover, min_temperature_f, max_temperature_f, avrg_temperature_f):
+        self.has_precipitation = has_precipitation
+        self.precipitation_type = precipitation_type
+        self.precipitation_intensity = precipitation_intensity
+        self.short_phrase = short_phrase
+        self.long_phrase = long_phrase
+        self.precipitation_probability = precipitation_probability
+        self.thunderstorm_probability = thunderstorm_probability
+        self.rain_probability = rain_probability
+        self.snow_probability = snow_probability
+        self.ice_probability = ice_probability
+        self.wind_speed_miph = wind_speed_miph
+        self.wind_direction_deg = wind_direction_deg
+        self.wind_gust_speed_miph = wind_gust_speed_miph
+        self.wind_gust_direction_deg = wind_gust_direction_deg
+        self.total_liquid_inch = total_liquid_inch
+        self.rain_inch = rain_inch
+        self.snow_inch = snow_inch
+        self.ice_inch = ice_inch
+        self.hours_of_precipitation = hours_of_precipitation
+        self.hours_of_rain = hours_of_rain
+        self.hours_of_snow = hours_of_snow
+        self.hours_of_ice = hours_of_ice
+        self.cloud_cover = cloud_cover
+        self.min_temperature_f = min_temperature_f
+        self.max_temperature_f = max_temperature_f
+        self.avrg_temperature_f = avrg_temperature_f
+
+    def __repr__(self):
+        return (f"Day(has_precipitation={self.has_precipitation}, precipitation_type={self.precipitation_type}, "
+                f"precipitation_intensity={self.precipitation_intensity}, short_phrase={self.short_phrase}, "
+                f"long_phrase={self.long_phrase}, precipitation_probability={self.precipitation_probability}, "
+                f"thunderstorm_probability={self.thunderstorm_probability}, rain_probability={self.rain_probability}, "
+                f"snow_probability={self.snow_probability}, ice_probability={self.ice_probability}, "
+                f"wind_speed_miph={self.wind_speed_miph}, wind_direction_deg={self.wind_direction_deg}, "
+                f"wind_gust_speed_miph={self.wind_gust_speed_miph}, wind_gust_direction_deg={self.wind_gust_direction_deg}, "
+                f"total_liquid_inch={self.total_liquid_inch}, rain_inch={self.rain_inch}, snow_inch={self.snow_inch}, "
+                f"ice_inch={self.ice_inch}, hours_of_precipitation={self.hours_of_precipitation}, "
+                f"hours_of_rain={self.hours_of_rain}, hours_of_snow={self.hours_of_snow}, hours_of_ice={self.hours_of_ice}, "
+                f"cloud_cover={self.cloud_cover}, min_temperature_f={self.min_temperature_f}, "
+                f"max_temperature_f={self.max_temperature_f}, avrg_temperature_f={self.avrg_temperature_f})")
+
+    @classmethod
+    def from_accuweather(cls, day_data):
+        """
+
+        Factory method for creating Day/Night instances from day data format.
+
+        """
+        has_precipitation = day_data.get('HasPrecipitation', 'Unknown HasPrecipitation')
+        precipitation_type = day_data.get('PrecipitationType', 'Unknown PrecipitationType')
+        precipitation_intensity = day_data.get('PrecipitationIntensity', 'Unknown PrecipitationIntensity')
+        short_phrase = day_data.get('ShortPhrase', 'Unknown ShortPhrase')
+        long_phrase = day_data.get('LongPhrase', 'Unknown LongPhrase')
+        precipitation_probability = day_data.get('PrecipitationProbability', 'Unknown PrecipitationProbability')
+        thunderstorm_probability = day_data.get('ThunderstormProbability', 'Unknown ThunderstormProbability')
+        rain_probability = day_data.get('RainProbability', 'Unknown RainProbability')
+        snow_probability = day_data.get('SnowProbability', 'Unknown SnowProbability')
+        ice_probability = day_data.get('IceProbability', 'Unknown IceProbability')
+        wind_speed_miph = day_data['Wind']['Speed'].get('Value', 'Unknown Wind Speed')
+        wind_direction_deg = day_data['Wind']['Direction'].get('Degrees', 'Unknown Wind Direction')
+        wind_gust_speed_miph = day_data['WindGust']['Speed'].get('Value', 'Unknown Wind Gust Speed')
+        wind_gust_direction_deg = day_data['WindGust']['Direction'].get('Degrees', 'Unknown Wind Gust Direction')
+        total_liquid_inch = day_data['TotalLiquid'].get('Value', 'Unknown Total Liquid')
+        rain_inch = day_data['Rain'].get('Value', 'Unknown Rain Inch')
+        snow_inch = day_data['Snow'].get('Value', 'Unknown Snow Inch')
+        ice_inch = day_data['Ice'].get('Value', 'Unknown Ice Inch')
+        hours_of_precipitation = day_data.get('HoursOfPrecipitation', 'Unknown Hours Of Precipitation')
+        hours_of_rain = day_data.get('HoursOfRain', 'Unknown Hours Of Rain')
+        hours_of_snow = day_data.get('HoursOfSnow', 'Unknown Hours Of Snow')
+        hours_of_ice = day_data.get('HoursOfIce', 'Unknown Hours Of Ice')
+        cloud_cover = day_data.get('CloudCover', 'Unknown Cloud Cover')
+        min_temperature_f = day_data['WetBulbTemperature']['Minimum'].get('Value', 'Unknown Min Temperature')
+        max_temperature_f = day_data['WetBulbTemperature']['Maximum'].get('Value', 'Unknown Max Temperature')
+        avrg_temperature_f = day_data['WetBulbTemperature']['Average'].get('Value', 'Unknown Average Temperature')
+
+        return cls(has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
+                   precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
+                   ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
+                   total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,
+                   hours_of_snow, hours_of_ice, cloud_cover, min_temperature_f, max_temperature_f, avrg_temperature_f)

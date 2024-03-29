@@ -1,8 +1,6 @@
 from api import WeatherApiClient, AccuWeatherClient, WeatherData, OutputFormatter, CommandParser
 from api.data_formatting.weather_data import City, DailyForecast, Day
 
-import pprint
-
 
 class WeatherApp:
     """
@@ -27,13 +25,17 @@ class WeatherApp:
         raise ValueError(f"No API client found for source: {source}")
 
     def run(self):  # to do
+        # cli perform
         self.cli.parse()
         cmd_dict = self.cli.perform_operation()
+        # get specific api
         api_client: WeatherApiClient = self.get_api_client(cmd_dict['source'])
         city_list = api_client.get_city_list(cmd_dict['city'])
         weather_data = WeatherData()
         cities = weather_data.create_cities(city_list)
         specific_city: City = cities[0]
+        print(specific_city)
+        print('()'*100)
         forecasts_data = api_client.get_forecast(specific_city.key, cmd_dict['duration'])
         forecasts_list = weather_data.parse_to_list(forecasts_data=forecasts_data)
         forecasts = weather_data.create_forecasts(forecasts_list=forecasts_list)
@@ -42,6 +44,4 @@ class WeatherApp:
         night_dict = specific_forecast.night
         day: Day = weather_data.create_day_instance(day_night_dict=day_dict)
         night: Day = weather_data.create_day_instance(day_night_dict=night_dict)
-
-
-
+        output_formatter = OutputFormatter()

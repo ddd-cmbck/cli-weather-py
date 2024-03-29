@@ -27,6 +27,8 @@ class WeatherData:
         day = Day.from_accuweather(day_night_dict)
         return day
 
+
+
     def parse_to_list(self, forecasts_data: dict):
         forecasts_list = forecasts_data.get('DailyForecasts', 'Unknown DailyForecasts')
         return forecasts_list
@@ -57,11 +59,11 @@ class City:
         Factory method for creating City instances from accu weather data format.
 
         """
-        key = cities_data.get('Key', 'Unknown Key')
-        name = cities_data.get('EnglishName', 'Unknown Name')
-        country = cities_data.get('Country', {}).get('ID', 'Unknown Country ID')
-        admin_area = cities_data.get('AdministrativeArea', {}).get('EnglishName', 'Unknown Admin Area')
-        data_set = cities_data.get('DataSets', 'Unknown DataSet')
+        key = cities_data.get('Key', None)
+        name = cities_data.get('EnglishName', None)
+        country = cities_data.get('Country', {}).get('ID', None)
+        admin_area = cities_data.get('AdministrativeArea', {}).get('EnglishName', None)
+        data_set = cities_data.get('DataSets', None)
 
         return cls(key, name, country, admin_area, data_set)
 
@@ -96,15 +98,15 @@ class DailyForecast:
         Factory method for creating DailyForecast instances from accu weather data format.
 
         """
-        date = forecast_data.get('Date', 'Unknown Date')
-        sunrise = forecast_data['Sun'].get('Rise', 'Unknown Sun Data')
-        sunset = forecast_data['Sun'].get('Set', 'Unknown Sun Data')
-        moonrise = forecast_data['Moon'].get('Rise', 'Unknown Moon Data')
-        moonset = forecast_data['Moon'].get('Set', 'Unknown Moon Data')
-        temperature = forecast_data.get('Temperature', 'Unknown Temperature Data')
-        hours_of_sun = forecast_data.get('HoursOfSun', 'Unknown HoursOfSun')
-        day = forecast_data.get('Day', 'Unknown Day')
-        night = forecast_data.get('Night', 'Night')
+        date = forecast_data.get('Date', None)
+        sunrise = forecast_data['Sun'].get('Rise', None)
+        sunset = forecast_data['Sun'].get('Set', None)
+        moonrise = forecast_data['Moon'].get('Rise', None)
+        moonset = forecast_data['Moon'].get('Set', None)
+        temperature = forecast_data.get('Temperature', None)
+        hours_of_sun = forecast_data.get('HoursOfSun', None)
+        day = forecast_data.get('Day', None)
+        night = forecast_data.get('Night', None)
 
         return cls(date, sunrise, sunset, moonrise, moonset, temperature, hours_of_sun, day, night)
 
@@ -120,7 +122,7 @@ class Day:
                  precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
                  ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
                  total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,
-                 hours_of_snow, hours_of_ice, cloud_cover, min_temperature_f, max_temperature_f, avrg_temperature_f):
+                 hours_of_snow, hours_of_ice, cloud_cover):
         self.has_precipitation = has_precipitation
         self.precipitation_type = precipitation_type
         self.precipitation_intensity = precipitation_intensity
@@ -144,9 +146,6 @@ class Day:
         self.hours_of_snow = hours_of_snow
         self.hours_of_ice = hours_of_ice
         self.cloud_cover = cloud_cover
-        self.min_temperature_f = min_temperature_f
-        self.max_temperature_f = max_temperature_f
-        self.avrg_temperature_f = avrg_temperature_f
 
     def __repr__(self):
         return (f"Day(has_precipitation={self.has_precipitation}, precipitation_type={self.precipitation_type}, "
@@ -159,8 +158,7 @@ class Day:
                 f"total_liquid_inch={self.total_liquid_inch}, rain_inch={self.rain_inch}, snow_inch={self.snow_inch}, "
                 f"ice_inch={self.ice_inch}, hours_of_precipitation={self.hours_of_precipitation}, "
                 f"hours_of_rain={self.hours_of_rain}, hours_of_snow={self.hours_of_snow}, hours_of_ice={self.hours_of_ice}, "
-                f"cloud_cover={self.cloud_cover}, min_temperature_f={self.min_temperature_f}, "
-                f"max_temperature_f={self.max_temperature_f}, avrg_temperature_f={self.avrg_temperature_f})")
+                f"cloud_cover={self.cloud_cover}")
 
     @classmethod
     def from_accuweather(cls, day_data):
@@ -169,35 +167,32 @@ class Day:
         Factory method for creating Day/Night instances from day data format.
 
         """
-        has_precipitation = day_data.get('HasPrecipitation', 'Unknown HasPrecipitation')
-        precipitation_type = day_data.get('PrecipitationType', 'Unknown PrecipitationType')
-        precipitation_intensity = day_data.get('PrecipitationIntensity', 'Unknown PrecipitationIntensity')
-        short_phrase = day_data.get('ShortPhrase', 'Unknown ShortPhrase')
-        long_phrase = day_data.get('LongPhrase', 'Unknown LongPhrase')
-        precipitation_probability = day_data.get('PrecipitationProbability', 'Unknown PrecipitationProbability')
-        thunderstorm_probability = day_data.get('ThunderstormProbability', 'Unknown ThunderstormProbability')
-        rain_probability = day_data.get('RainProbability', 'Unknown RainProbability')
-        snow_probability = day_data.get('SnowProbability', 'Unknown SnowProbability')
-        ice_probability = day_data.get('IceProbability', 'Unknown IceProbability')
-        wind_speed_miph = day_data['Wind']['Speed'].get('Value', 'Unknown Wind Speed')
-        wind_direction_deg = day_data['Wind']['Direction'].get('Degrees', 'Unknown Wind Direction')
-        wind_gust_speed_miph = day_data['WindGust']['Speed'].get('Value', 'Unknown Wind Gust Speed')
-        wind_gust_direction_deg = day_data['WindGust']['Direction'].get('Degrees', 'Unknown Wind Gust Direction')
-        total_liquid_inch = day_data['TotalLiquid'].get('Value', 'Unknown Total Liquid')
-        rain_inch = day_data['Rain'].get('Value', 'Unknown Rain Inch')
-        snow_inch = day_data['Snow'].get('Value', 'Unknown Snow Inch')
-        ice_inch = day_data['Ice'].get('Value', 'Unknown Ice Inch')
-        hours_of_precipitation = day_data.get('HoursOfPrecipitation', 'Unknown Hours Of Precipitation')
-        hours_of_rain = day_data.get('HoursOfRain', 'Unknown Hours Of Rain')
-        hours_of_snow = day_data.get('HoursOfSnow', 'Unknown Hours Of Snow')
-        hours_of_ice = day_data.get('HoursOfIce', 'Unknown Hours Of Ice')
-        cloud_cover = day_data.get('CloudCover', 'Unknown Cloud Cover')
-        min_temperature_f = day_data['WetBulbTemperature']['Minimum'].get('Value', 'Unknown Min Temperature')
-        max_temperature_f = day_data['WetBulbTemperature']['Maximum'].get('Value', 'Unknown Max Temperature')
-        avrg_temperature_f = day_data['WetBulbTemperature']['Average'].get('Value', 'Unknown Average Temperature')
+        has_precipitation = day_data.get('HasPrecipitation', None)
+        precipitation_type = day_data.get('PrecipitationType', None)
+        precipitation_intensity = day_data.get('PrecipitationIntensity', None)
+        short_phrase = day_data.get('ShortPhrase', None)
+        long_phrase = day_data.get('LongPhrase', None)
+        precipitation_probability = day_data.get('PrecipitationProbability', None)
+        thunderstorm_probability = day_data.get('ThunderstormProbability', None)
+        rain_probability = day_data.get('RainProbability', None)
+        snow_probability = day_data.get('SnowProbability', None)
+        ice_probability = day_data.get('IceProbability', None)
+        wind_speed_miph = day_data['Wind']['Speed'].get('Value', None)
+        wind_direction_deg = day_data['Wind']['Direction'].get('Degrees', None)
+        wind_gust_speed_miph = day_data['WindGust']['Speed'].get('Value', None)
+        wind_gust_direction_deg = day_data['WindGust']['Direction'].get('Degrees', None)
+        total_liquid_inch = day_data['TotalLiquid'].get('Value', None)
+        rain_inch = day_data['Rain'].get('Value', None)
+        snow_inch = day_data['Snow'].get('Value', None)
+        ice_inch = day_data['Ice'].get('Value', None)
+        hours_of_precipitation = day_data.get('HoursOfPrecipitation', None)
+        hours_of_rain = day_data.get('HoursOfRain', None)
+        hours_of_snow = day_data.get('HoursOfSnow', None)
+        hours_of_ice = day_data.get('HoursOfIce', None)
+        cloud_cover = day_data.get('CloudCover', None)
 
         return cls(has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
                    precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
                    ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
                    total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,
-                   hours_of_snow, hours_of_ice, cloud_cover, min_temperature_f, max_temperature_f, avrg_temperature_f)
+                   hours_of_snow, hours_of_ice, cloud_cover)

@@ -118,11 +118,12 @@ class Day:
 
     """
 
-    def __init__(self, has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
+    def __init__(self, icon_phrase, has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
                  precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
                  ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
                  total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,
                  hours_of_snow, hours_of_ice, cloud_cover):
+        self.icon_phrase = icon_phrase
         self.has_precipitation = has_precipitation
         self.precipitation_type = precipitation_type
         self.precipitation_intensity = precipitation_intensity
@@ -148,7 +149,7 @@ class Day:
         self.cloud_cover = cloud_cover
 
     def __repr__(self):
-        return (f"Day(has_precipitation={self.has_precipitation}, precipitation_type={self.precipitation_type}, "
+        return (f"Day(icon_phrase={self.icon_phrase}, has_precipitation={self.has_precipitation}, precipitation_type={self.precipitation_type}, "
                 f"precipitation_intensity={self.precipitation_intensity}, short_phrase={self.short_phrase}, "
                 f"long_phrase={self.long_phrase}, precipitation_probability={self.precipitation_probability}, "
                 f"thunderstorm_probability={self.thunderstorm_probability}, rain_probability={self.rain_probability}, "
@@ -167,6 +168,7 @@ class Day:
         Factory method for creating Day/Night instances from day data format.
 
         """
+        icon_phrase = day_data.get('IconPhrase', None)
         has_precipitation = day_data.get('HasPrecipitation', None)
         precipitation_type = day_data.get('PrecipitationType', None)
         precipitation_intensity = day_data.get('PrecipitationIntensity', None)
@@ -191,7 +193,7 @@ class Day:
         hours_of_ice = day_data.get('HoursOfIce', None)
         cloud_cover = day_data.get('CloudCover', None)
 
-        return cls(has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
+        return cls(icon_phrase, has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
                    precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
                    ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
                    total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,

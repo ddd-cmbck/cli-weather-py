@@ -1,3 +1,6 @@
+from api.data_formatting.weather_data import City, DailyForecast, Day
+
+
 class OutputFormatter:
     """
 
@@ -7,7 +10,7 @@ class OutputFormatter:
     sunny = """
        \    /   
         .--.    
-     - (    ) - 
+    -- (    ) -- 
         `--’    
        /    \   
     """
@@ -16,7 +19,7 @@ class OutputFormatter:
     sunny_with_clouds = """
        \    /   
         .--.     .--.
-     - (    )--(    ).
+     - (    )--(     ).
         `--’ (___.__)__)
        /    \    
     """
@@ -29,11 +32,11 @@ class OutputFormatter:
 
     # Clouds with Rain
     clouds_with_rain = """
-          .--.
-      .-(     ). 
-     (___.__)___)
-        ` ` ` ` 
-        ` ` ` ` 
+          .--.    
+      .-(     ).   
+     (___.__)___) 
+        ` ` ` `    
+        ` ` ` `    
     """
 
     # Clouds with Snow
@@ -45,7 +48,7 @@ class OutputFormatter:
         *  *  * 
     """
 
-    # Clouds with Ice (using a crystal-like symbol to represent ice)
+    # Clouds with Ice
     clouds_with_ice = """
           .--.
       .-(     ). 
@@ -64,7 +67,13 @@ class OutputFormatter:
         "CloudsWithIce": clouds_with_ice,
     }
 
-    def format(self, weather_data):
+    def city_format(self, city_obj: City):
+        pass
+
+    def forecast_format(self, forecast_obj: DailyForecast):
+        pass
+
+    def day_format(self, day_obj: Day):
         pass
 
     def convert_temperature_F(self):
@@ -96,18 +105,36 @@ class OutputFormatter:
 
 
 class VerboseFormatter(OutputFormatter):
-    def format(self, weather_data):
+    def city_format(self, city_obj: City):
         # Implementation for verbose format
+        pass
+
+    def forecast_format(self, forecast_obj: DailyForecast):
+        pass
+
+    def day_format(self, day_obj: Day):
         pass
 
 
 class ShortFormatter(OutputFormatter):
-    def format(self, weather_data):
-        # Implementation for short format
+    def city_format(self, city_obj: City):
+        # Implementation for verbose format
+        pass
+
+    def forecast_format(self, forecast_obj: DailyForecast):
+        pass
+
+    def day_format(self, day_obj: Day):
         pass
 
 
 class DefaultFormatter(OutputFormatter):
-    def format(self, weather_data):
-        # Implementation for default format
+    def city_format(self, city_obj: City):
+        # Implementation for verbose format
+        pass
+
+    def forecast_format(self, forecast_obj: DailyForecast):
+        pass
+
+    def day_format(self, day_obj: Day):
         pass

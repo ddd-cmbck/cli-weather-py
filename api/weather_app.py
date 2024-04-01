@@ -34,8 +34,6 @@ class WeatherApp:
         weather_data = WeatherData()
         cities = weather_data.create_cities(city_list)
         specific_city: City = cities[0]
-        print(specific_city)
-        print('()'*100)
         forecasts_data = api_client.get_forecast(specific_city.key, cmd_dict['duration'])
         forecasts_list = weather_data.parse_to_list(forecasts_data=forecasts_data)
         forecasts = weather_data.create_forecasts(forecasts_list=forecasts_list)

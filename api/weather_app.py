@@ -1,4 +1,5 @@
 from api import WeatherApiClient, AccuWeatherClient, WeatherData, OutputFormatter, CommandParser
+from api.data_formatting.formats import DefaultFormatter, VerboseFormatter, ShortFormatter
 from api.data_formatting.weather_data import City, DailyForecast, Day
 
 
@@ -15,6 +16,11 @@ class WeatherApp:
         self.api_clients = {
             "accuweather.com": AccuWeatherClient,
         }
+        self.formats = {
+            "default": DefaultFormatter,
+            "verbose": VerboseFormatter,
+            "short": ShortFormatter
+        }
 
     def get_api_client(self, source):
 
@@ -24,12 +30,20 @@ class WeatherApp:
 
         raise ValueError(f"No API client found for source: {source}")
 
+    def get_output_format(self, output):
+
+        for key in self.formats:
+            if key in output:
+                return self.formats[key]()
+        raise ValueError(f'Not supported output format: {output}')
+
     def run(self):  # to do
         # cli perform
         self.cli.parse()
         cmd_dict = self.cli.perform_operation()
         # get specific api
         api_client: WeatherApiClient = self.get_api_client(cmd_dict['source'])
+        output_formatter: OutputFormatter = self.get_output_format(cmd_dict['output'])
         city_list = api_client.get_city_list(cmd_dict['city'])
         weather_data = WeatherData()
         cities = weather_data.create_cities(city_list)
@@ -42,4 +56,7 @@ class WeatherApp:
         night_dict = specific_forecast.night
         day: Day = weather_data.create_day_instance(day_night_dict=day_dict)
         night: Day = weather_data.create_day_instance(day_night_dict=night_dict)
-        output_formatter = OutputFormatter()
+        print(output_formatter.city_format(specific_city))
+        print(output_formatter.forecast_format(specific_forecast))
+        print(output_formatter.day_format(day))
+        print(output_formatter.day_format(night))

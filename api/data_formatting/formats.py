@@ -1,5 +1,7 @@
 from api.data_formatting.weather_data import City, DailyForecast, Day
 
+import datetime
+
 
 class OutputFormatter:
     """
@@ -13,6 +15,22 @@ class OutputFormatter:
     -- (    ) -- 
         `--’    
        /    \   
+    """
+
+    moon = """
+         .-`
+       :` ;  
+      (  (    
+       :  ;
+         `-.              
+    """
+    # Moon with Clouds
+    moon_with_clouds = """
+         .-`
+       :` ;   .--.
+      (  (  (     ).  
+       :  ;(___.__)__)   
+         `-. 
     """
 
     # Sunny with Clouds
@@ -67,6 +85,9 @@ class OutputFormatter:
         "CloudsWithIce": clouds_with_ice,
     }
 
+    def print_output(self):
+        pass
+
     def city_format(self, city_obj: City):
         pass
 
@@ -106,35 +127,45 @@ class OutputFormatter:
 
 class VerboseFormatter(OutputFormatter):
     def city_format(self, city_obj: City):
-        # Implementation for verbose format
-        pass
+        label = f'| Admin Area ::::: {city_obj.admin_area}\n' \
+                f'| Name of City ::::: {city_obj.name}\n' \
+                f'| Country ::::: {city_obj.country}, {city_obj.country_id}\n\n'
+        return label
 
     def forecast_format(self, forecast_obj: DailyForecast):
-        pass
+        print(forecast_obj)
 
     def day_format(self, day_obj: Day):
-        pass
+        print(day_obj)
 
 
 class ShortFormatter(OutputFormatter):
     def city_format(self, city_obj: City):
-        # Implementation for verbose format
-        pass
+        label = f'\n{city_obj.name}, {city_obj.key}\n\n'
+        return label
 
     def forecast_format(self, forecast_obj: DailyForecast):
-        pass
+        label = 'March 12 12:33\n' \
+                'Sunrise at 5:34\n' \
+                'Temperature\n' \
+                'Max: 12 deg, avrg: 10 deg, min: 8 deg\n\n'
+        return label
 
     def day_format(self, day_obj: Day):
-        pass
+        label = 'Very windy; Morning Showers\n' \
+                'Precipitation: Rain\n' \
+                'Intensity: Light\n' \
+                'wind speed: 32 km/h\n\n'
+        return label
 
 
 class DefaultFormatter(OutputFormatter):
     def city_format(self, city_obj: City):
-        # Implementation for verbose format
-        pass
+        label = f'{city_obj.admin_area} ::::: {city_obj.name} ::::: {city_obj.country}\n\n'
+        return label
 
     def forecast_format(self, forecast_obj: DailyForecast):
-        pass
+        print(forecast_obj)
 
     def day_format(self, day_obj: Day):
-        pass
+        print(day_obj)

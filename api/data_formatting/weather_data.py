@@ -41,16 +41,17 @@ class City:
 
     """
 
-    def __init__(self, key, name, country, admin_area, data_set, **kwargs):
+    def __init__(self, key, name, country, country_id, admin_area, data_set, **kwargs):
         self.key = key
         self.name = name
-        self.country = country
+        self.country_id = country_id
         self.admin_area = admin_area
         self.data_set = data_set
+        self.country = country
 
     def __repr__(self):
         return f'City(key={self.key}, name={self.name}' \
-               f', country={self.country}, admin_area={self.admin_area})'
+               f', country={self.country}, country_id={self.country_id} admin_area={self.admin_area})'
 
     @classmethod
     def from_accuweather(cls, cities_data):
@@ -61,11 +62,12 @@ class City:
         """
         key = cities_data.get('Key', None)
         name = cities_data.get('EnglishName', None)
-        country = cities_data.get('Country', {}).get('ID', None)
+        country = cities_data.get('Country', {}).get('EnglishName', None)
+        country_id = cities_data.get('Country', {}).get('ID', None)
         admin_area = cities_data.get('AdministrativeArea', {}).get('EnglishName', None)
         data_set = cities_data.get('DataSets', None)
 
-        return cls(key, name, country, admin_area, data_set)
+        return cls(key, name, country,country_id, admin_area, data_set)
 
 
 class DailyForecast:
@@ -89,7 +91,7 @@ class DailyForecast:
 
     def __repr__(self):
         return f'Forecast(date={self.date}, sunrise={self.sunrise}, sunset={self.sunset},moonrise={self.moonrise}, ' \
-               f'moonset={self.moonset}, day={self.day}, night={self.night})'
+               f'moonset={self.moonset},temp={self.temperature}, day={self.day}, night={self.night})'
 
     @classmethod
     def from_accuweather(cls, forecast_data: dict):

@@ -1,14 +1,9 @@
-import datetime as dt
-import requests
+from api import WeatherApp
 
-BASE_URL = 'https://dataservice.accuweather.com/forecasts/v1/daily/1day/'
-CITY_CODE = '207697'
-API_KEY = open('api_key.txt', 'r').read()
+if __name__ == '__main__':
+    cli = WeatherApp()
+    cli.run()
 
-url = BASE_URL + CITY_CODE + '?apikey=' + API_KEY
 
-response = requests.get(url).json()
-
-print(response)
 
 

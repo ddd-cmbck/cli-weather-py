@@ -16,7 +16,7 @@ WeatherCLI is a command-line weather application that fetches and displays weath
 Before you can run WeatherCLI, you'll need Python 3.7 or later. Clone this repository to your local machine to get started:
 
 ```bash
-git clone https://github.com/yourgithub/weathercli.git
+git clone https://github.com/ddd-cmbck/cli-weather-py
 cd weathercli
 ```
 

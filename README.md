@@ -17,7 +17,7 @@ Before you can run WeatherCLI, you'll need Python 3.7 or later. Clone this repos
 
 ```bash
 git clone https://github.com/ddd-cmbck/cli-weather-py
-cd weathercli
+cd cli-weather-py
 ```
 
 Install the required dependencies:

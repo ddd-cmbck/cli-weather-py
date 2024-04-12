@@ -1,7 +1,6 @@
-from api.data_formatting.weather_data import City, DailyForecast, Day
+from api.data_formatting.weather_data import City, DailyForecast
 
-import datetime
-
+from datetime import datetime
 
 class OutputFormatter:
     """
@@ -93,10 +92,6 @@ class OutputFormatter:
 
     def forecast_format(self, forecast_obj: DailyForecast):
         pass
-
-    def day_format(self, day_obj: Day):
-        pass
-
     def convert_temperature_F(self):
         pass
 
@@ -129,33 +124,16 @@ class VerboseFormatter(OutputFormatter):
     def city_format(self, city_obj: City):
         label = f'| Admin Area ::::: {city_obj.admin_area}\n' \
                 f'| Name of City ::::: {city_obj.name}\n' \
-                f'| Country ::::: {city_obj.country}, {city_obj.country_id}\n\n'
+                f'| Country ::::: {city_obj.country}, {city_obj.country}\n\n'
         return label
 
     def forecast_format(self, forecast_obj: DailyForecast):
         print(forecast_obj)
 
-    def day_format(self, day_obj: Day):
-        print(day_obj)
-
 
 class ShortFormatter(OutputFormatter):
     def city_format(self, city_obj: City):
-        label = f'\n{city_obj.name}, {city_obj.key}\n\n'
-        return label
-
-    def forecast_format(self, forecast_obj: DailyForecast):
-        label = 'March 12 12:33\n' \
-                'Sunrise at 5:34\n' \
-                'Temperature\n' \
-                'Max: 12 deg, avrg: 10 deg, min: 8 deg\n\n'
-        return label
-
-    def day_format(self, day_obj: Day):
-        label = 'Very windy; Morning Showers\n' \
-                'Precipitation: Rain\n' \
-                'Intensity: Light\n' \
-                'wind speed: 32 km/h\n\n'
+        label = f'\n{city_obj.name}, {city_obj.city_id}\n\n'
         return label
 
 
@@ -167,5 +145,3 @@ class DefaultFormatter(OutputFormatter):
     def forecast_format(self, forecast_obj: DailyForecast):
         print(forecast_obj)
 
-    def day_format(self, day_obj: Day):
-        print(day_obj)

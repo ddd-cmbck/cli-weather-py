@@ -1,6 +1,6 @@
 from api import WeatherApiClient, AccuWeatherClient, WeatherData, OutputFormatter, CommandParser
 from api.data_formatting.formats import DefaultFormatter, VerboseFormatter, ShortFormatter
-from api.data_formatting.weather_data import City, DailyForecast, Day
+from api.data_formatting.weather_data import City, DailyForecast
 
 
 class WeatherApp:
@@ -13,6 +13,7 @@ class WeatherApp:
 
     def __init__(self):
         self.cli = CommandParser()
+        self.weather_data = WeatherData()
         self.api_clients = {
             "accuweather.com": AccuWeatherClient,
         }
@@ -30,6 +31,22 @@ class WeatherApp:
 
         raise ValueError(f"No API client found for source: {source}")
 
+    def choose_item(self, items: list):
+        for index, item in enumerate(items, start=1):
+            print(f"{index}. {item}")
+
+        while True:
+            try:
+                choice = int(input("Enter the number of your choice: "))
+                if 1 <= choice <= len(items):
+                    selected_item = items[choice - 1]
+                    print(f"You have chosen {selected_item}.")
+                    return selected_item
+                else:
+                    print("Invalid choice, please choose a valid number.")
+            except ValueError:
+                print("Please enter a numeric value.")
+
     def get_output_format(self, output):
 
         for key in self.formats:
@@ -38,25 +55,31 @@ class WeatherApp:
         raise ValueError(f'Not supported output format: {output}')
 
     def run(self):  # to do
-        # cli perform
+        # CLI command processing
         self.cli.parse()
         cmd_dict = self.cli.perform_operation()
-        # get specific api
+
+        # API client selection based on source
         api_client: WeatherApiClient = self.get_api_client(cmd_dict['source'])
+
+        # Output formatter selection based on desired output type
         output_formatter: OutputFormatter = self.get_output_format(cmd_dict['output'])
-        city_list = api_client.get_city_list(cmd_dict['city'])
-        weather_data = WeatherData()
-        cities = weather_data.create_cities(city_list)
-        specific_city: City = cities[0]
-        forecasts_data = api_client.get_forecast(specific_city.key, cmd_dict['duration'])
-        forecasts_list = weather_data.parse_to_list(forecasts_data=forecasts_data)
-        forecasts = weather_data.create_forecasts(forecasts_list=forecasts_list)
+
+        # City data retrieval and processing
+        city_json = api_client.get_city_request(cmd_dict['city'])
+        city_list = api_client.parse_city_list(city_json)
+        cities = self.weather_data.parse_to_objects(city_list)
+        specific_city: City = self.choose_item(cities)
+
+        # Weather forecast retrieval and processing
+        forecasts_json = api_client.get_forecast_request(specific_city.city_id, cmd_dict['duration'])
+        forecasts_list = api_client.parse_forecasts_list(forecasts_json)
+        forecasts = self.weather_data.parse_forecasts(forecasts_list)
         specific_forecast: DailyForecast = forecasts[0]
-        day_dict = specific_forecast.day
-        night_dict = specific_forecast.night
-        day: Day = weather_data.create_day_instance(day_night_dict=day_dict)
-        night: Day = weather_data.create_day_instance(day_night_dict=night_dict)
-        print(output_formatter.city_format(specific_city))
-        print(output_formatter.forecast_format(specific_forecast))
-        print(output_formatter.day_format(day))
-        print(output_formatter.day_format(night))
+        print(specific_forecast)
+
+        # Output formatting and printing
+        # print(output_formatter.city_format(specific_city))
+        # print(output_formatter.forecast_format(specific_forecast))
+        # print(output_formatter.day_format(day))
+        # print(output_formatter.day_format(night))

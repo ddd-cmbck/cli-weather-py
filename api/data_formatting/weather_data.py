@@ -54,6 +54,22 @@ class WeatherData:
             ulist.append(forecast)
         return ulist
 
+    def choose_item(self, items: list):
+        for index, item in enumerate(items, start=1):
+            print(f"{index}. {item}")
+
+        while True:
+            try:
+                choice = int(input("Enter the number of your choice: "))
+                if 1 <= choice <= len(items):
+                    selected_item = items[choice - 1]
+                    print(f"You have chosen {selected_item}.")
+                    return selected_item
+                else:
+                    print("Invalid choice, please choose a valid number.")
+            except ValueError:
+                print("Please enter a numeric value.")
+
 
 class City:
     """

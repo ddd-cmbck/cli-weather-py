@@ -2,6 +2,7 @@ from api.data_formatting.weather_data import City, DailyForecast
 
 from datetime import datetime
 
+
 class OutputFormatter:
     """
 
@@ -84,39 +85,13 @@ class OutputFormatter:
         "CloudsWithIce": clouds_with_ice,
     }
 
-    def print_output(self):
+    def convert_date(self, date_str):
         pass
 
     def city_format(self, city_obj: City):
         pass
 
     def forecast_format(self, forecast_obj: DailyForecast):
-        pass
-    def convert_temperature_F(self):
-        pass
-
-    def convert_temperature_C(self):
-        pass
-
-    def convert_temperature_K(self):
-        pass
-
-    def wind_speed_kmh(self):
-        pass
-
-    def wind_speed_mph(self):
-        pass
-
-    def wind_seed_meter_p_sec(self):
-        pass
-
-    def date_format_DMY(self):
-        pass
-
-    def date_format_MDY(self):
-        pass
-
-    def date_format_YMD(self):
         pass
 
 
@@ -130,11 +105,25 @@ class VerboseFormatter(OutputFormatter):
     def forecast_format(self, forecast_obj: DailyForecast):
         print(forecast_obj)
 
+    def convert_date(self, date_str):
+        date_obj = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
+        formatted_date = date_obj.strftime('%A, %B %d')
+        return formatted_date
+
 
 class ShortFormatter(OutputFormatter):
     def city_format(self, city_obj: City):
         label = f'\n{city_obj.name}, {city_obj.city_id}\n\n'
         return label
+
+    def forecast_format(self, forecast_obj: DailyForecast):
+        label = f'bla..bla'
+        return label
+
+    def convert_date(self, date_str):
+        date_obj = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
+        formatted_date = date_obj.strftime('%m-%d')
+        return formatted_date
 
 
 class DefaultFormatter(OutputFormatter):
@@ -145,3 +134,7 @@ class DefaultFormatter(OutputFormatter):
     def forecast_format(self, forecast_obj: DailyForecast):
         print(forecast_obj)
 
+    def convert_date(self, date_str):
+        date_obj = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
+        formatted_date = date_obj.strftime('%B %d')
+        return formatted_date

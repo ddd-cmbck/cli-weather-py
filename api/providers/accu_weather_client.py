@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 from api.providers.weather_api_client import WeatherApiClient
 
@@ -77,6 +78,7 @@ class AccuWeatherClient(WeatherApiClient):  # to do
         for forecast in forecasts:
             # forecast values
             date = forecast.get('Date', None)
+
             sunrise = forecast.get('Sun', {}).get('Rise')
             sunset = forecast.get('Sun', {}).get('Set')
             moonrise = forecast.get('Moon', {}).get('Rise')
@@ -113,3 +115,4 @@ class AccuWeatherClient(WeatherApiClient):  # to do
             forecast_list.append(forecast_info)
 
         return forecast_list
+

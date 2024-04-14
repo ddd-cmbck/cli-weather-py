@@ -9,65 +9,83 @@ class WeatherData:
         self.udict = {}
         self.ulist = []
 
-    def create_cities(self, cities_list: list):
+    def parse_to_objects(self, cities_list: list):
         ulist = []
         for c in cities_list:
-            city = City.from_accuweather(c)
+            city_name = c.get('name')
+            city_id = c.get('city_id')
+            admin_area = c.get('admin_area')
+            country = c.get('country')
+            longitude = c.get('longitude')
+            latitude = c.get('latitude')
+            city = City(city_id=city_id, name=city_name, admin_area=admin_area,
+                        country=country, longitude=longitude, latitude=latitude)
             ulist.append(city)
         return ulist
 
-    def create_forecasts(self, forecasts_list: list):
+    def parse_forecasts(self, forecasts_list: list):
         ulist = []
         for f in forecasts_list:
-            forecast = DailyForecast.from_accuweather(f)
+            # Extracting fields
+            date = f.get('date')
+            sunrise = f.get('sunrise')
+            sunset = f.get('sunset')
+            moonrise = f.get('moonrise')
+            moonset = f.get('moonset')
+            min_temp = f.get('min_temp')
+            max_temp = f.get('max_temp')
+            min_real_feel_temp = f.get('min_real_feel_temp')
+            max_real_feel_temp = f.get('max_real_feel_temp')
+            day_has_precipitations = f.get('day_has_precipitations')
+            day_precip_type = f.get('day_precip_type')
+            day_precip_intensity = f.get('day_precip_intensity')
+            day_wind_speed = f.get('day_wind_speed')
+            day_wind_direction = f.get('day_wind_direction')
+            night_has_precipitations = f.get('night_has_precipitations')
+            night_precip_type = f.get('night_precip_type')
+            night_precip_intensity = f.get('night_precip_intensity')
+            night_wind_speed = f.get('night_wind_speed')
+            night_wind_direction = f.get('night_wind_direction')
+
+            forecast = DailyForecast(date, sunrise, sunset, moonrise, moonset, min_temp, max_temp, min_real_feel_temp,
+                                     max_real_feel_temp, day_has_precipitations, day_precip_type, day_precip_intensity,
+                                     day_wind_speed, day_wind_direction, night_has_precipitations, night_precip_type,
+                                     night_precip_intensity, night_wind_speed, night_wind_direction)
             ulist.append(forecast)
         return ulist
 
-    def create_day_instance(self, day_night_dict):
-        day = Day.from_accuweather(day_night_dict)
-        return day
+    def choose_item(self, items: list):
+        for index, item in enumerate(items, start=1):
+            print(f"{index}. {item}")
 
-
-
-    def parse_to_list(self, forecasts_data: dict):
-        forecasts_list = forecasts_data.get('DailyForecasts', 'Unknown DailyForecasts')
-        return forecasts_list
+        while True:
+            try:
+                choice = int(input("Enter the number of your choice: "))
+                if 1 <= choice <= len(items):
+                    selected_item = items[choice - 1]
+                    print(f"You have chosen {selected_item}.")
+                    return selected_item
+                else:
+                    print("Invalid choice, please choose a valid number.")
+            except ValueError:
+                print("Please enter a numeric value.")
 
 
 class City:
     """
-
-    Class for extracting and generalizing city data from API requested datasets
-
+    Class for extracting and generalizing city data from API requested datasets.
     """
 
-    def __init__(self, key, name, country, country_id, admin_area, data_set, **kwargs):
-        self.key = key
+    def __init__(self, city_id: int, name: str, admin_area: str, country: str, latitude: float, longitude: float):
+        self.city_id = city_id
         self.name = name
-        self.country_id = country_id
-        self.admin_area = admin_area
-        self.data_set = data_set
         self.country = country
+        self.admin_area = admin_area
+        self.latitude = latitude
+        self.longitude = longitude
 
-    def __repr__(self):
-        return f'City(key={self.key}, name={self.name}' \
-               f', country={self.country}, country_id={self.country_id} admin_area={self.admin_area})'
-
-    @classmethod
-    def from_accuweather(cls, cities_data):
-        """
-
-        Factory method for creating City instances from accu weather data format.
-
-        """
-        key = cities_data.get('Key', None)
-        name = cities_data.get('EnglishName', None)
-        country = cities_data.get('Country', {}).get('EnglishName', None)
-        country_id = cities_data.get('Country', {}).get('ID', None)
-        admin_area = cities_data.get('AdministrativeArea', {}).get('EnglishName', None)
-        data_set = cities_data.get('DataSets', None)
-
-        return cls(key, name, country,country_id, admin_area, data_set)
+    def __str__(self):
+        return f'{self.name}, {self.admin_area}, {self.country}'
 
 
 class DailyForecast:
@@ -77,126 +95,37 @@ class DailyForecast:
 
     """
 
-    def __init__(self, date, sunrise, sunset, moonrise, moonset, temperature, hours_of_sun, day, night,
-                 **kwargs):
+    def __init__(self, date, sunrise, sunset, moonrise, moonset, min_temp, max_temp, min_real_feel_temp,
+                 max_real_feel_temp, day_has_precipitations, day_precip_type, day_precip_intensity, day_wind_speed,
+                 day_wind_direction, night_has_precipitations, night_precip_type, night_precip_intensity,
+                 night_wind_speed, night_wind_direction):
         self.date = date
         self.sunrise = sunrise
         self.sunset = sunset
         self.moonrise = moonrise
         self.moonset = moonset
-        self.temperature = temperature
-        self.hours_of_sun = hours_of_sun
-        self.day = day
-        self.night = night
+        self.min_temp = min_temp
+        self.max_temp = max_temp
+        self.min_real_feel_temp = min_real_feel_temp
+        self.max_real_feel_temp = max_real_feel_temp
+        self.day_has_precipitations = day_has_precipitations
+        self.day_precip_type = day_precip_type
+        self.day_precip_intensity = day_precip_intensity
+        self.day_wind_speed = day_wind_speed
+        self.day_wind_direction = day_wind_direction
+        self.night_has_precipitations = night_has_precipitations
+        self.night_precip_type = night_precip_type
+        self.night_precip_intensity = night_precip_intensity
+        self.night_wind_speed = night_wind_speed
+        self.night_wind_direction = night_wind_direction
 
     def __repr__(self):
-        return f'Forecast(date={self.date}, sunrise={self.sunrise}, sunset={self.sunset},moonrise={self.moonrise}, ' \
-               f'moonset={self.moonset},temp={self.temperature}, day={self.day}, night={self.night})'
-
-    @classmethod
-    def from_accuweather(cls, forecast_data: dict):
-        """
-
-        Factory method for creating DailyForecast instances from accu weather data format.
-
-        """
-        date = forecast_data.get('Date', None)
-        sunrise = forecast_data['Sun'].get('Rise', None)
-        sunset = forecast_data['Sun'].get('Set', None)
-        moonrise = forecast_data['Moon'].get('Rise', None)
-        moonset = forecast_data['Moon'].get('Set', None)
-        temperature = forecast_data.get('Temperature', None)
-        hours_of_sun = forecast_data.get('HoursOfSun', None)
-        day = forecast_data.get('Day', None)
-        night = forecast_data.get('Night', None)
-
-        return cls(date, sunrise, sunset, moonrise, moonset, temperature, hours_of_sun, day, night)
-
-
-class Day:
-    """
-
-    Class for extracting and generalizing day related data from forecast data
-
-    """
-
-    def __init__(self, icon_phrase, has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
-                 precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
-                 ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
-                 total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,
-                 hours_of_snow, hours_of_ice, cloud_cover):
-        self.icon_phrase = icon_phrase
-        self.has_precipitation = has_precipitation
-        self.precipitation_type = precipitation_type
-        self.precipitation_intensity = precipitation_intensity
-        self.short_phrase = short_phrase
-        self.long_phrase = long_phrase
-        self.precipitation_probability = precipitation_probability
-        self.thunderstorm_probability = thunderstorm_probability
-        self.rain_probability = rain_probability
-        self.snow_probability = snow_probability
-        self.ice_probability = ice_probability
-        self.wind_speed_miph = wind_speed_miph
-        self.wind_direction_deg = wind_direction_deg
-        self.wind_gust_speed_miph = wind_gust_speed_miph
-        self.wind_gust_direction_deg = wind_gust_direction_deg
-        self.total_liquid_inch = total_liquid_inch
-        self.rain_inch = rain_inch
-        self.snow_inch = snow_inch
-        self.ice_inch = ice_inch
-        self.hours_of_precipitation = hours_of_precipitation
-        self.hours_of_rain = hours_of_rain
-        self.hours_of_snow = hours_of_snow
-        self.hours_of_ice = hours_of_ice
-        self.cloud_cover = cloud_cover
-
-    def __repr__(self):
-        return (f"Day(icon_phrase={self.icon_phrase}, has_precipitation={self.has_precipitation}, precipitation_type={self.precipitation_type}, "
-                f"precipitation_intensity={self.precipitation_intensity}, short_phrase={self.short_phrase}, "
-                f"long_phrase={self.long_phrase}, precipitation_probability={self.precipitation_probability}, "
-                f"thunderstorm_probability={self.thunderstorm_probability}, rain_probability={self.rain_probability}, "
-                f"snow_probability={self.snow_probability}, ice_probability={self.ice_probability}, "
-                f"wind_speed_miph={self.wind_speed_miph}, wind_direction_deg={self.wind_direction_deg}, "
-                f"wind_gust_speed_miph={self.wind_gust_speed_miph}, wind_gust_direction_deg={self.wind_gust_direction_deg}, "
-                f"total_liquid_inch={self.total_liquid_inch}, rain_inch={self.rain_inch}, snow_inch={self.snow_inch}, "
-                f"ice_inch={self.ice_inch}, hours_of_precipitation={self.hours_of_precipitation}, "
-                f"hours_of_rain={self.hours_of_rain}, hours_of_snow={self.hours_of_snow}, hours_of_ice={self.hours_of_ice}, "
-                f"cloud_cover={self.cloud_cover}")
-
-    @classmethod
-    def from_accuweather(cls, day_data):
-        """
-
-        Factory method for creating Day/Night instances from day data format.
-
-        """
-        icon_phrase = day_data.get('IconPhrase', None)
-        has_precipitation = day_data.get('HasPrecipitation', None)
-        precipitation_type = day_data.get('PrecipitationType', None)
-        precipitation_intensity = day_data.get('PrecipitationIntensity', None)
-        short_phrase = day_data.get('ShortPhrase', None)
-        long_phrase = day_data.get('LongPhrase', None)
-        precipitation_probability = day_data.get('PrecipitationProbability', None)
-        thunderstorm_probability = day_data.get('ThunderstormProbability', None)
-        rain_probability = day_data.get('RainProbability', None)
-        snow_probability = day_data.get('SnowProbability', None)
-        ice_probability = day_data.get('IceProbability', None)
-        wind_speed_miph = day_data['Wind']['Speed'].get('Value', None)
-        wind_direction_deg = day_data['Wind']['Direction'].get('Degrees', None)
-        wind_gust_speed_miph = day_data['WindGust']['Speed'].get('Value', None)
-        wind_gust_direction_deg = day_data['WindGust']['Direction'].get('Degrees', None)
-        total_liquid_inch = day_data['TotalLiquid'].get('Value', None)
-        rain_inch = day_data['Rain'].get('Value', None)
-        snow_inch = day_data['Snow'].get('Value', None)
-        ice_inch = day_data['Ice'].get('Value', None)
-        hours_of_precipitation = day_data.get('HoursOfPrecipitation', None)
-        hours_of_rain = day_data.get('HoursOfRain', None)
-        hours_of_snow = day_data.get('HoursOfSnow', None)
-        hours_of_ice = day_data.get('HoursOfIce', None)
-        cloud_cover = day_data.get('CloudCover', None)
-
-        return cls(icon_phrase, has_precipitation, precipitation_type, precipitation_intensity, short_phrase, long_phrase,
-                   precipitation_probability, thunderstorm_probability, rain_probability, snow_probability,
-                   ice_probability, wind_speed_miph, wind_direction_deg, wind_gust_speed_miph, wind_gust_direction_deg,
-                   total_liquid_inch, rain_inch, snow_inch, ice_inch, hours_of_precipitation, hours_of_rain,
-                   hours_of_snow, hours_of_ice, cloud_cover)
+        return (f"DailyForecast(date={self.date!r}, sunrise={self.sunrise!r}, sunset={self.sunset!r}, "
+                f"moonrise={self.moonrise!r}, moonset={self.moonset!r}, min_temp={self.min_temp}, "
+                f"max_temp={self.max_temp}, min_real_feel_temp={self.min_real_feel_temp}, "
+                f"max_real_feel_temp={self.max_real_feel_temp}, day_has_precipitations={self.day_has_precipitations}, "
+                f"day_precip_type={self.day_precip_type!r}, day_precip_intensity={self.day_precip_intensity!r}, "
+                f"day_wind_speed={self.day_wind_speed}, day_wind_direction={self.day_wind_direction!r}, "
+                f"night_has_precipitations={self.night_has_precipitations}, night_precip_type={self.night_precip_type!r}, "
+                f"night_precip_intensity={self.night_precip_intensity!r}, night_wind_speed={self.night_wind_speed}, "
+                f"night_wind_direction={self.night_wind_direction!r})")

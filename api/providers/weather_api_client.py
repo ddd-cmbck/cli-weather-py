@@ -1,3 +1,7 @@
+import datetime
+
+import requests
+
 
 class WeatherApiClient:
 

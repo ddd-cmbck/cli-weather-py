@@ -1,7 +1,3 @@
-import datetime
-
-import requests
-
 
 class WeatherApiClient:
 
@@ -23,6 +19,4 @@ class WeatherApiClient:
     def parse_forecasts_list(self, forecasts_json):
         return None
 
-    def convert_iso_date_format(self, date_str):
-        return None
 

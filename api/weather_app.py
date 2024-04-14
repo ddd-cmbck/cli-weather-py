@@ -31,6 +31,22 @@ class WeatherApp:
 
         raise ValueError(f"No API client found for source: {source}")
 
+    def choose_item(self, items: list):
+        for index, item in enumerate(items, start=1):
+            print(f"{index}. {item}")
+
+        while True:
+            try:
+                choice = int(input("Enter the number of your choice: "))
+                if 1 <= choice <= len(items):
+                    selected_item = items[choice - 1]
+                    print(f"You have chosen {selected_item}.")
+                    return selected_item
+                else:
+                    print("Invalid choice, please choose a valid number.")
+            except ValueError:
+                print("Please enter a numeric value.")
+
     def get_output_format(self, output):
 
         for key in self.formats:
@@ -53,13 +69,17 @@ class WeatherApp:
         city_json = api_client.get_city_request(cmd_dict['city'])
         city_list = api_client.parse_city_list(city_json)
         cities = self.weather_data.parse_to_objects(city_list)
-        specific_city: City = self.weather_data.choose_item(cities)
+        specific_city: City = self.choose_item(cities)
 
         # Weather forecast retrieval and processing
         forecasts_json = api_client.get_forecast_request(specific_city.city_id, cmd_dict['duration'])
         forecasts_list = api_client.parse_forecasts_list(forecasts_json)
         forecasts = self.weather_data.parse_forecasts(forecasts_list)
         specific_forecast: DailyForecast = forecasts[0]
+        print(specific_forecast)
 
-        print(output_formatter.city_format(specific_city))
-        print(output_formatter.forecast_format(specific_forecast))
+        # Output formatting and printing
+        # print(output_formatter.city_format(specific_city))
+        # print(output_formatter.forecast_format(specific_forecast))
+        # print(output_formatter.day_format(day))
+        # print(output_formatter.day_format(night))

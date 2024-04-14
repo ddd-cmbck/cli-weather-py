@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 from api.providers.weather_api_client import WeatherApiClient
 

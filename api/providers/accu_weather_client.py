@@ -1,5 +1,4 @@
 import requests
-from datetime import datetime
 
 from api.providers.weather_api_client import WeatherApiClient
 
@@ -83,24 +82,23 @@ class AccuWeatherClient(WeatherApiClient):  # to do
             sunset = forecast.get('Sun', {}).get('Set')
             moonrise = forecast.get('Moon', {}).get('Rise')
             moonset = forecast.get('Moon', {}).get('Set')
-            min_temp = forecast.get('Temperature', {}).get('Minimum', {}).get('Value')  # Value in Fahrenheit
-            max_temp = forecast.get('Temperature', {}).get('Maximum', {}).get('Value')  # Value in Fahrenheit
-            min_real_feel_temp = forecast.get('RealFeelTemperature', {}).get('Minimum', {}).get(
-                'Value')  # Value in Fahrenheit
-            max_real_feel_temp = forecast.get('RealFeelTemperature', {}).get('Maximum', {}).get(
-                'Value')  # Value in Fahrenheit
-            day_has_precipitations = forecast.get('Day', {}).get('HasPrecipitation')
+            min_temp = float(forecast.get('Temperature', {}).get('Minimum', {}).get('Value'))  # Value in Fahrenheit
+            max_temp = float(forecast.get('Temperature', {}).get('Maximum', {}).get('Value'))  # Value in Fahrenheit
+            min_real_feel_temp = float(forecast.get('RealFeelTemperature', {}).get('Minimum', {}).get(
+                'Value'))  # Value in Fahrenheit
+            max_real_feel_temp = float(forecast.get('RealFeelTemperature', {}).get('Maximum', {}).get('Value'))  # Value in Fahrenheit
+            day_has_precipitations = float(forecast.get('Day', {}).get('HasPrecipitation'))
             day_precip_type = forecast.get('Day', {}).get('PrecipitationType')
             day_precip_intensity = forecast.get('Day', {}).get('PrecipitationIntensity')
-            day_wind_speed = forecast.get('Day', {}).get('Wind', {}).get('Speed', {}).get('Value')
-            day_wind_direction = forecast.get('Day', {}).get('Wind', {}).get('Direction', {}).get(
-                'Value')  # value in degrees
-            night_has_precipitations = forecast.get('Day', {}).get('HasPrecipitation')
+            day_wind_speed = float(forecast.get('Day', {}).get('Wind', {}).get('Speed', {}).get('Value'))
+            day_wind_direction = float(forecast.get('Day', {}).get('Wind', {}).get('Direction', {}).get(
+                'Degrees'))  # value in degrees
+            night_has_precipitations = bool(forecast.get('Day', {}).get('HasPrecipitation'))
             night_precip_type = forecast.get('Day', {}).get('PrecipitationType')
             night_precip_intensity = forecast.get('Day', {}).get('PrecipitationIntensity')
-            night_wind_speed = forecast.get('Day', {}).get('Wind', {}).get('Speed', {}).get('Value')
-            night_wind_direction = forecast.get('Day', {}).get('Wind', {}).get('Direction', {}).get(
-                'Value')  # value in degrees
+            night_wind_speed = float(forecast.get('Day', {}).get('Wind', {}).get('Speed', {}).get('Value'))
+            night_wind_direction = float(forecast.get('Day', {}).get('Wind', {}).get('Direction', {}).get(
+                'Degrees'))  # value in degrees
 
             forecast_info = {'date': date, 'sunrise': sunrise, 'sunset': sunset, 'moonrise': moonrise,
                              'moonset': moonset, 'min_temp': min_temp, 'max_temp': max_temp,

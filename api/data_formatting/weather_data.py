@@ -73,12 +73,10 @@ class WeatherData:
 
 class City:
     """
-
-    Class for extracting and generalizing city data from API requested datasets
-
+    Class for extracting and generalizing city data from API requested datasets.
     """
 
-    def __init__(self, city_id, name, admin_area, country, latitude, longitude):
+    def __init__(self, city_id: int, name: str, admin_area: str, country: str, latitude: float, longitude: float):
         self.city_id = city_id
         self.name = name
         self.country = country
@@ -86,8 +84,9 @@ class City:
         self.latitude = latitude
         self.longitude = longitude
 
-    def __repr__(self):
+    def __str__(self):
         return f'{self.name}, {self.admin_area}, {self.country}'
+
 
 class DailyForecast:
     """
@@ -98,8 +97,8 @@ class DailyForecast:
 
     def __init__(self, date, sunrise, sunset, moonrise, moonset, min_temp, max_temp, min_real_feel_temp,
                  max_real_feel_temp, day_has_precipitations, day_precip_type, day_precip_intensity, day_wind_speed,
-                 day_wind_direction, night_has_precipitations, night_precip_type, night_precip_intensity, night_wind_speed,
-                 night_wind_direction):
+                 day_wind_direction, night_has_precipitations, night_precip_type, night_precip_intensity,
+                 night_wind_speed, night_wind_direction):
         self.date = date
         self.sunrise = sunrise
         self.sunset = sunset
@@ -121,7 +120,7 @@ class DailyForecast:
         self.night_wind_direction = night_wind_direction
 
     def __repr__(self):
-        return (f"DailyWeatherReport(date={self.date!r}, sunrise={self.sunrise!r}, sunset={self.sunset!r}, "
+        return (f"DailyForecast(date={self.date!r}, sunrise={self.sunrise!r}, sunset={self.sunset!r}, "
                 f"moonrise={self.moonrise!r}, moonset={self.moonset!r}, min_temp={self.min_temp}, "
                 f"max_temp={self.max_temp}, min_real_feel_temp={self.min_real_feel_temp}, "
                 f"max_real_feel_temp={self.max_real_feel_temp}, day_has_precipitations={self.day_has_precipitations}, "

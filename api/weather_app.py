@@ -59,7 +59,7 @@ class WeatherApp:
         forecasts_json = api_client.get_forecast_request(specific_city.city_id, cmd_dict['duration'])
         forecasts_list = api_client.parse_forecasts_list(forecasts_json)
         forecasts = self.weather_data.parse_forecasts(forecasts_list)
-        specific_forecast: DailyForecast = forecasts
+        specific_forecast: DailyForecast = forecasts[0]
 
         print(output_formatter.city_format(specific_city))
         print(output_formatter.forecast_format(specific_forecast))

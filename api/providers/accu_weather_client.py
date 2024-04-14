@@ -1,4 +1,5 @@
 import requests
+import os
 
 from api.providers.weather_api_client import WeatherApiClient
 
@@ -12,7 +13,7 @@ class AccuWeatherClient(WeatherApiClient):  # to do
     """
 
     def __init__(self):
-        self.api_key = 'EQwGZb1GUqPiFCx66wG5TU6cvLrnTaJh'
+        self.api_key = os.getenv('ACCUWEATHER_API_KEY')
         self.base_url = 'https://dataservice.accuweather.com/'
 
     def get_city_request(self, location_name: str):

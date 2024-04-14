@@ -20,25 +20,19 @@ git clone https://github.com/ddd-cmbck/cli-weather-py
 cd cli-weather-py
 ```
 
-Install the required dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
 ## Usage
 
 Run WeatherCLI with Python. Here are some example commands:
 
 ```bash
-# Get a 5-day weather forecast for Cork in the default format
-python main.py forecast -c Cork -dur 5day
+# Get a 1-day weather forecast for Cork in the default format
+python main.py forecast -c Cork -dur 1day
 
 # Get a verbose weather forecast for Tokyo
 python main.py forecast -c Tokyo -o verbose
 
-# Get a short weather forecast for New York with a 15-day duration
-python main.py forecast -c "New York" -dur 15day -o short
+# Get a short weather forecast for New York with a 1-day duration
+python main.py forecast -c "New York" -dur 1day -o short
 ```
 
 ## Configuration

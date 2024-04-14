@@ -1,10 +1,7 @@
-import datetime
-
-import requests
+import os
 
 
 class WeatherApiClient:
-
     """
 
     Defines a common interface for all weather API clients.
@@ -23,4 +20,5 @@ class WeatherApiClient:
     def parse_forecasts_list(self, forecasts_json):
         return None
 
-
+    def set_accuweather_api_key(self, api_key):
+        os.environ['ACCUWEATHER_API_KEY'] = api_key
